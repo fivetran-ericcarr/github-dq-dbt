@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: github
+    database: ERICC_TEST_DB
+    schema: github
+    description: >
+      Raw GitHub data replicated by Fivetran (connector `pungent_delegator`,
+      repo `fivetran/dbt_github`) into Snowflake.
+    loaded_at_field: _fivetran_synced
+    freshness:
+      warn_after: { count: 24, period: hour }
+      error_after: { count: 48, period: hour }
+    tables:
+      - name: repository
+      - name: issue
+      - name: pull_request
+      - name: issue_comment
+      - name: label
+      - name: milestone
+      - name: pull_request_review
+      # `user` is a reserved word in Snowflake -> must be quoted.
+      - name: user
+        identifier: user
+        quoting:
+          identifier: true
