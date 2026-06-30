@@ -6,11 +6,11 @@ models:
     columns:
       - name: repository_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: repository_full_name
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: owner_id
-        data_tests:
+        tests:
           - relationships:
               to: ref('stg_github__user')
               field: user_id
@@ -22,35 +22,35 @@ models:
     columns:
       - name: user_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: user_login
-        data_tests: [not_null]
+        tests: [not_null]
 
   - name: stg_github__issue
     description: One row per issue.
     columns:
       - name: issue_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: state
-        data_tests:
+        tests:
           - accepted_values:
               values: ['open', 'closed']
       - name: repository_id
-        data_tests:
+        tests:
           - not_null
           - relationships:
               to: ref('stg_github__repository')
               field: repository_id
       - name: user_id
-        data_tests:
+        tests:
           - relationships:
               to: ref('stg_github__user')
               field: user_id
               config:
                 severity: warn
       - name: milestone_id
-        data_tests:
+        tests:
           - relationships:
               to: ref('stg_github__milestone')
               field: milestone_id
@@ -62,9 +62,9 @@ models:
     columns:
       - name: pull_request_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: issue_id
-        data_tests:
+        tests:
           - relationships:
               to: ref('stg_github__issue')
               field: issue_id
@@ -76,16 +76,16 @@ models:
     columns:
       - name: issue_comment_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: issue_id
-        data_tests:
+        tests:
           - relationships:
               to: ref('stg_github__issue')
               field: issue_id
               config:
                 severity: warn
       - name: user_id
-        data_tests:
+        tests:
           - relationships:
               to: ref('stg_github__user')
               field: user_id
@@ -97,22 +97,22 @@ models:
     columns:
       - name: label_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: label_name
-        data_tests: [not_null]
+        tests: [not_null]
 
   - name: stg_github__milestone
     description: One row per milestone.
     columns:
       - name: milestone_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: state
-        data_tests:
+        tests:
           - accepted_values:
               values: ['open', 'closed']
       - name: repository_id
-        data_tests:
+        tests:
           - relationships:
               to: ref('stg_github__repository')
               field: repository_id
@@ -122,9 +122,9 @@ models:
     columns:
       - name: pull_request_review_id
         description: Primary key.
-        data_tests: [not_null, unique]
+        tests: [not_null, unique]
       - name: pull_request_id
-        data_tests:
+        tests:
           - not_null
           - relationships:
               to: ref('stg_github__pull_request')
@@ -132,7 +132,7 @@ models:
               config:
                 severity: warn
       - name: state
-        data_tests:
+        tests:
           - accepted_values:
               values: ['approved', 'changes_requested', 'commented', 'dismissed', 'pending']
               config:
