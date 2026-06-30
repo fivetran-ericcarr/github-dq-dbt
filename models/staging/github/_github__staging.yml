@@ -49,13 +49,6 @@ models:
               field: user_id
               config:
                 severity: warn
-      - name: milestone_id
-        tests:
-          - relationships:
-              to: ref('stg_github__milestone')
-              field: milestone_id
-              config:
-                severity: warn
 
   - name: stg_github__pull_request
     description: One row per pull request.
@@ -100,22 +93,6 @@ models:
         tests: [not_null, unique]
       - name: label_name
         tests: [not_null]
-
-  - name: stg_github__milestone
-    description: One row per milestone.
-    columns:
-      - name: milestone_id
-        description: Primary key.
-        tests: [not_null, unique]
-      - name: state
-        tests:
-          - accepted_values:
-              values: ['open', 'closed']
-      - name: repository_id
-        tests:
-          - relationships:
-              to: ref('stg_github__repository')
-              field: repository_id
 
   - name: stg_github__pull_request_review
     description: One row per pull request review.

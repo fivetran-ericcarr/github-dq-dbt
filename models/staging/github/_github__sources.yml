@@ -17,10 +17,10 @@ sources:
       - name: pull_request
       - name: issue_comment
       - name: label
-      - name: milestone
       - name: pull_request_review
-      # `user` is a reserved word in Snowflake -> must be quoted.
+      # `user` is a reserved word in Snowflake -> must be quoted. Fivetran stores
+      # identifiers upper-cased, so quote the upper-case name.
       - name: user
-        identifier: user
+        identifier: USER
         quoting:
           identifier: true
