@@ -1,0 +1,44 @@
+version: 2
+
+semantic_models:
+  - name: repository_issues
+    description: Semantic model over the repository issue summary mart.
+    model: ref('github__repository_issue_summary')
+    defaults:
+      agg_time_dimension: last_issue_created_at
+    entities:
+      - name: repository
+        type: primary
+        expr: repository_id
+    dimensions:
+      - name: language
+        type: categorical
+      - name: last_issue_created_at
+        type: time
+        type_params:
+          time_granularity: day
+    measures:
+      - name: open_issues_sum
+        agg: sum
+        expr: open_issues
+      - name: issues_sum
+        agg: sum
+        expr: total_issues
+      - name: repository_count
+        agg: count_distinct
+        expr: repository_id
+
+metrics:
+  - name: total_open_issues
+    label: Total Open Issues
+    description: Sum of open issues across repositories.
+    type: simple
+    type_params:
+      measure: open_issues_sum
+  - name: open_issue_rate
+    label: Open Issue Rate
+    description: Share of issues that are open.
+    type: ratio
+    type_params:
+      numerator: open_issues_sum
+      denominator: issues_sum
