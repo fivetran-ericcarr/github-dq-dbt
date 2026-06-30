@@ -35,10 +35,16 @@ metrics:
     type: simple
     type_params:
       measure: open_issues_sum
+  - name: total_issues
+    label: Total Issues
+    description: Sum of issues across repositories.
+    type: simple
+    type_params:
+      measure: issues_sum
   - name: open_issue_rate
     label: Open Issue Rate
     description: Share of issues that are open.
     type: ratio
     type_params:
-      numerator: open_issues_sum
-      denominator: issues_sum
+      numerator: total_open_issues
+      denominator: total_issues
