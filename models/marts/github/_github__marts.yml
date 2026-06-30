@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: github__repository_issue_summary
+    description: >
+      One row per repository with issue and pull request counts. Demonstrates
+      model -> model lineage (staging -> mart) for the metadata-service join.
+    columns:
+      - name: repository_id
+        description: Primary key (one row per repository).
+        tests: [not_null, unique]
+      - name: repository_full_name
+        tests: [not_null]
+      - name: total_issues
+        tests: [not_null]
+      - name: open_issues
+        tests: [not_null]
+      - name: closed_issues
+        tests: [not_null]
