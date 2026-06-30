@@ -1,0 +1,29 @@
+version: 2
+
+exposures:
+  - name: github_repo_health_dashboard
+    label: GitHub Repo Health
+    type: dashboard
+    maturity: high
+    url: https://bi.example.com/dashboards/github-repo-health
+    description: >
+      Executive dashboard tracking repository issue and pull-request health.
+      Downstream business consumer of the GitHub models — used to demonstrate
+      blast-radius / business-impact analysis in the metadata-service.
+    depends_on:
+      - ref('github__repository_issue_summary')
+      - ref('stg_github__issue')
+    owner:
+      name: Data Platform Team
+      email: data-platform@example.com
+
+  - name: issue_triage_ml
+    label: Issue Triage Model
+    type: ml
+    maturity: medium
+    description: ML model that predicts issue resolution time from issue history.
+    depends_on:
+      - ref('stg_github__issue')
+    owner:
+      name: ML Engineering
+      email: ml-eng@example.com
