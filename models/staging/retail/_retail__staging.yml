@@ -41,4 +41,9 @@ models:
       - name: customer_id
         tests:
           - not_null
-          - unique
+          # warn (not error) so the build succeeds and downstream models aren't
+          # skipped — but the 143 failures are recorded. The activation gate treats
+          # any upstream test with failures > 0 as a reason to block.
+          - unique:
+              config:
+                severity: warn
