@@ -40,9 +40,9 @@ models:
       - name: open_tickets
         data_type: number
       - name: last_order_at
-        data_type: timestamp_tz
+        data_type: timestamp_ntz
       - name: churn_score
-        data_type: float
+        data_type: number
         tests: [not_null]
       - name: lifecycle_stage
         data_type: varchar
