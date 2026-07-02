@@ -24,6 +24,15 @@ tickets as (
     group by 1
 ),
 
+-- Region-level enrichment from the customer master. This makes customer_churn
+-- depend on stg_retail__customers, whose customer_id uniqueness test fails —
+-- which the reverse-ETL activation gate treats as an upstream DQ risk.
+region_features as (
+    select region, count(*) as region_customer_count
+    from {{ ref('stg_retail__customers') }}
+    group by region
+),
+
 joined as (
     select
         c.customer_id,
@@ -36,10 +45,12 @@ joined as (
         o.returned_or_cancelled_orders,
         o.last_order_at,
         t.ticket_count,
-        t.open_tickets
+        t.open_tickets,
+        rf.region_customer_count
     from customers c
-    left join orders  o on c.customer_id = o.customer_id
-    left join tickets t on c.customer_id = t.customer_id
+    left join orders  o  on c.customer_id = o.customer_id
+    left join tickets t  on c.customer_id = t.customer_id
+    left join region_features rf on c.region = rf.region
 ),
 
 scored as (
@@ -67,6 +78,7 @@ select
     coalesce(returned_or_cancelled_orders, 0)   as returned_or_cancelled_orders,
     coalesce(ticket_count, 0)                   as ticket_count,
     coalesce(open_tickets, 0)                   as open_tickets,
+    coalesce(region_customer_count, 0)          as region_customer_count,
     last_order_at,
     churn_score,
     case

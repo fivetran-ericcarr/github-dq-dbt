@@ -39,6 +39,8 @@ models:
         data_type: number
       - name: open_tickets
         data_type: number
+      - name: region_customer_count
+        data_type: number
       - name: last_order_at
         data_type: timestamp_ntz
       - name: churn_score
