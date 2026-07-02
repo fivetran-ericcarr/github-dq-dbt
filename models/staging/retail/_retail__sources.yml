@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: retail
+    database: ERICC_TEST_DB
+    schema: retail
+    description: Retail customer/order/ticket data replicated by Fivetran (Postgres).
+    loaded_at_field: _fivetran_synced
+    freshness:
+      warn_after: { count: 24, period: hour }
+      error_after: { count: 48, period: hour }
+    tables:
+      - name: ret_customers
+      - name: ret_orders
+      - name: ret_tickets
+      - name: customers

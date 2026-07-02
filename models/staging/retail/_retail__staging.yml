@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: stg_retail__ret_customers
+    description: One row per retail customer (the churn spine; carries CRM email).
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: email
+        tests: [not_null]
+
+  - name: stg_retail__orders
+    description: One row per retail order.
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_retail__ret_customers')
+              field: customer_id
+
+  - name: stg_retail__tickets
+    description: One row per support ticket.
+    columns:
+      - name: ticket_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - relationships:
+              to: ref('stg_retail__ret_customers')
+              field: customer_id
+
+  - name: stg_retail__customers
+    description: >
+      Large customer master. NOTE: customer_id is not unique in the source
+      (~143 duplicates) — the `unique` test below intentionally FAILS to
+      demonstrate the reverse-ETL activation gate blocking a bad activation.
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique

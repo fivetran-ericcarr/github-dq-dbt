@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: customer_churn
+    description: >
+      One row per retail customer with a churn score and lifecycle stage. Source
+      for the Fivetran Activations sync to Salesforce (Contact, matched on email).
+    config:
+      contract:
+        enforced: true
+      meta:
+        owner: Data Platform Team
+    access: public
+    group: analytics
+    columns:
+      - name: customer_id
+        data_type: varchar
+        constraints:
+          - type: not_null
+        tests: [not_null, unique]
+      - name: email
+        data_type: varchar
+        tests: [not_null, unique]
+      - name: customer_name
+        data_type: varchar
+      - name: region
+        data_type: varchar
+      - name: customer_start_date
+        data_type: date
+      - name: tenure_days
+        data_type: number
+      - name: order_count
+        data_type: number
+      - name: total_spend
+        data_type: number
+      - name: returned_or_cancelled_orders
+        data_type: number
+      - name: ticket_count
+        data_type: number
+      - name: open_tickets
+        data_type: number
+      - name: last_order_at
+        data_type: timestamp_tz
+      - name: churn_score
+        data_type: float
+        tests: [not_null]
+      - name: lifecycle_stage
+        data_type: varchar
+        tests:
+          - accepted_values:
+              values: ['prospect', 'active', 'at_risk', 'dormant']
