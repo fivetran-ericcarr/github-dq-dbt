@@ -5,7 +5,12 @@ sources:
     database: ERICC_TEST_DB
     schema: retail
     description: Retail customer/order/ticket data replicated by Fivetran (Postgres).
-    loaded_at_field: _fivetran_synced
+    # Fivetran's Postgres connector stores identifiers lower-cased in Snowflake, so
+    # the schema/tables/columns must be quoted.
+    quoting:
+      schema: true
+      identifier: true
+    loaded_at_field: '"_fivetran_synced"'
     freshness:
       warn_after: { count: 24, period: hour }
       error_after: { count: 48, period: hour }
